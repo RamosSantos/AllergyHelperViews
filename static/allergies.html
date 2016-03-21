@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <!-- Firebase -->
+    <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <!-- AngularFire -->
+    <script src="https://cdn.firebase.com/libs/angularfire/1.1.4/angularfire.min.js"></script>
+    <!-- JQuey -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+    <!--Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+          
+  <title></title>
+  <link rel="stylesheet" href="">
+</head>
+<body >
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand active" href="../../index.html">AllergyHelper</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="#" id="allergies" >Alergias</a></li>
+          <li><a href="substancies.html" id="substancies" >Substâncias</a></li>
+          <li><a href="products.html" id="products"  >Produtos</a></li>
+        </ul>
+      </div>
+  </nav><br>
+  <div class="container"><br>
+      <div class="row">
+        <form >
+          <div >
+            <div >
+              <h3>Substância</h3>
+              <label for="name">Nome</label>
+              <input type="text" id="name" class="form-control" required="true"><br>
+              <label for="component">Componente</label>
+              <textarea type="text" id="component" class="form-control" required="true"></textarea><br>
+              <button class="btn btn-default" type="submit" id="submit" style="float:right">
+                Cadastrar   
+              </button>
+              
+            </div>
+          </div>
+         
+        </form>
+      </div>
+  </div>
+  <div id="componentsList">
+      
+  </div>
+  
+</body>
+</html>

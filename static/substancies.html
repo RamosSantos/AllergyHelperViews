@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html ng-app="substaciesApp">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <!-- Firebase -->
+    <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <!-- AngularFire -->
+    <script src="https://cdn.firebase.com/libs/angularfire/1.1.4/angularfire.min.js"></script>
+    <!-- JQuey -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+    <!--Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+          
+  <title></title>
+  <link rel="stylesheet" href="">
+</head>
+<body ng-controller="substanciesCrtl">
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand active" href="../../index.html">AllergyHelper</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="allergies.html" id="allergies" >Alergias</a></li>
+          <li><a href="#" id="substancies" >Substâncias</a></li>
+          <li><a href="products.html" id="products"  >Produtos</a></li>
+        </ul>
+      </div>
+  </nav><br>
+  <div class="container"><br>
+      <div class="row">
+        <form >
+          <div >
+            <div >
+              <h3>Substância</h3>
+              <label for="name">Nome</label>
+              <input type="text" id="name" class="form-control" required="true" ><br>
+              <label for="substancies">Substância</label>
+              <textarea type="text" id="substancies" class="form-control" required="true"></textarea><br>
+              <button class="btn btn-default" type="submit" id="submit" style="float:right">
+                Cadastrar   
+              </button>
+              
+            </div>
+          </div>
+         
+        </form>
+      </div>
+  </div><br>
+  <div id="substanciesList" class="container">
+      <table class="table">
+      <thead>
+              <tr>
+                  <th ng-model="name" >Nome</th>
+                  <th ng-model="desc">Descrição</th>
+          <th >Remover</th>
+          <th >Editar</th>
+              </tr>
+      </thead>
+      <tr ng-repeat="allergy in dataList">
+        <td ng-model="name">{{ allergy.commonName }}</td>
+        <td ng-model="desc">{{ allergy.desc }}</td>
+        <td><a href="" ng-click="dataList.$remove(allergy)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
+        <td><a href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
+        <td><button class="btn btn-default" disabled="disabled" ng-click="dataList.$save(allergy)" ><span class="glyphicon glyphicon glyphicon-ok"></span></button></td>
+        
+      </tr>
+    </table>
+  </div>
+  <script type="text/javascript">
+        var app = angular.module("substaciesApp",["firebase"]);
+        app.controller("substanciesCrtl",function($scope,$firebaseArray){
+          var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
+          $scope.dataList = $firebaseArray(ref);
+          console.log($scope.dataList);
+    
+          var isInputRendered =true;
+          $scope.editItem = function(element){ 
+            console.log(desc + name)
+            var element = element.target;
+            var desc = $(element).closest('td').prev('td').prev('td').text();
+            var name = $(element).closest('td').prev('td').prev('td').prev('td').text();
+            $(element).closest('td').next('td').find('button').removeAttr('disabled');
+            if(isInputRendered){
+              $(element).closest('td').prev('td').prev('td').append("<input type='text' class='form-control input-sm' required='required' value='"+desc+"'></input>");
+              $(element).closest('td').prev('td').prev('td').prev('td').append("<input type='text' class='form-control input-sm' required='required' value='"+name+"'></input>");
+              
+              console.log(desc + name)
+              isInputRendered=false;
+            }else{
+              isInputRendered=true;
+            }
+            
+          }
+        });
+  </script>
+</body>
+</html>
