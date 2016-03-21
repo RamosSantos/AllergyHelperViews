@@ -75,25 +75,10 @@
         app.controller("substanciesCrtl",function($scope,$firebaseArray){
           var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
           $scope.dataList = $firebaseArray(ref);
-          console.log($scope.dataList);
-    
           var isInputRendered =true;
           $scope.editItem = function(element){ 
-            console.log(desc + name)
             var element = element.target;
-            var desc = $(element).closest('td').prev('td').prev('td').text();
-            var name = $(element).closest('td').prev('td').prev('td').prev('td').text();
-            $(element).closest('td').next('td').find('button').removeAttr('disabled');
-            if(isInputRendered){
-              $(element).closest('td').prev('td').prev('td').append("<input type='text' class='form-control input-sm' required='required' value='"+desc+"'></input>");
-              $(element).closest('td').prev('td').prev('td').prev('td').append("<input type='text' class='form-control input-sm' required='required' value='"+name+"'></input>");
-              
-              console.log(desc + name)
-              isInputRendered=false;
-            }else{
-              isInputRendered=true;
-            }
-            
+            $(element).closest('td').next('td').find('button').removeAttr('disabled');        
           }
         });
   </script>
