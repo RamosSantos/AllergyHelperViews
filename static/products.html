@@ -9,33 +9,34 @@
     <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
     <!-- AngularFire -->
     <script src="https://cdn.firebase.com/libs/angularfire/1.1.4/angularfire.min.js"></script>
-    <!-- JQuey -->
+    <!-- JQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
     <!--Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <!-- CSS GERAL -->
+    <link rel="stylesheet" type="text/css" href="..\resources\css\style.css">
           
   <title></title>
   <link rel="stylesheet" href="">
 </head>
 <body >
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand active" href="../../index.html">AllergyHelper</a>
-        </div>
-        <ul class="nav navbar-nav">
-          <li><a href="allergies.html" id="allergies" >Alergias</a></li>
-          <li><a href="substancies.html" id="substancies" >Substâncias</a></li>
-          <li><a href="#" id="products"  >Produtos</a></li>
-        </ul>
-      </div>
-  </nav><br>
+    <div class="jumbotron">
+        <a class="" href="nn\..\..\index.html">
+            <img src="..\resources\img\logo.png" alt="">
+        </a>
+        <nav  id="navcontainer">            
+            <a href="allergies.html" id="allergies">Alergias</a>
+            <a href="substancies.html" id="substancies">Substâncias</a>
+            <a href="products.html" id="products">Produtos</a>
+        </nav>
+    </div>
+    <br>
   <div class="container"><br>
       <div class="row">
         <form >
           <div >
             <div >
-              <h3>Substância</h3>
+              <h3>Produto</h3>
               <label for="name">Nome</label>
               <input type="text" id="name" class="form-control" required="true"><br>
               <label for="component">Componente</label>
