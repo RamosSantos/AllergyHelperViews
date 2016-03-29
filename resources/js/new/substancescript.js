@@ -47,7 +47,11 @@ $(function() {
         }
     });
 
+<<<<<<< HEAD
     $('.form-control.casnum').on('keyup', function() {
+=======
+    $('#casnum').on('keyup', 'input', function() {
+>>>>>>> origin/master
         var limit = parseInt($(this).attr('maxlength'));
         if (this.value.length === limit) {
             $(this).next().focus();
@@ -60,12 +64,19 @@ $(function() {
     });
 });
 
+<<<<<<< HEAD
+=======
+$('#submit').click(function(){
+    alert("Clicou");
+});
+>>>>>>> origin/master
 
 var app = angular.module("substaciesApp", ["firebase"]);
 app.controller("substanciesCrtl", function($scope, $firebaseArray) {
     var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
     $scope.dataList = $firebaseArray(ref);
 
+<<<<<<< HEAD
     $scope.submitForm = function(){
         var casnum = $scope.casnum1+$scope.casnum2+$scope.casnum3;       
     };
@@ -80,5 +91,15 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray) {
         name.addClass('form-control').removeClass('input-table-disable');
         desc.removeAttr('disabled');
         desc.addClass('form-control').removeClass('input-table-disable');      
+=======
+    $scope.someMethod = function(){
+        alert("Did something");
+    };
+
+    var isInputRendered = true;
+    $scope.editItem = function(argElement) {
+        var element = argElement.target;
+        $(element).closest('td').next('td').find('button').removeAttr('disabled');
+>>>>>>> origin/master
     };
 });
