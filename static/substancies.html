@@ -1,86 +1,114 @@
 <!DOCTYPE html>
 <html ng-app="substaciesApp">
+
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
     <!-- Firebase -->
     <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
     <!-- AngularFire -->
     <script src="https://cdn.firebase.com/libs/angularfire/1.1.4/angularfire.min.js"></script>
-    <!-- JQuey -->
+    <!-- JQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
     <!--Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
-          
-  <title></title>
-  <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <!-- Select2 stylesheet -->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.css" rel="stylesheet" />
+    <!-- Select2 -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.full.js"></script>
+    <script type="text/javascript" src="..\resources\js\new\substancescript.js"></script>
+    <title></title>
+    <link rel="stylesheet" href="">
 </head>
+
 <body ng-controller="substanciesCrtl">
     <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand active" href="../../index.html">AllergyHelper</a>
-        </div>
-        <ul class="nav navbar-nav">
-          <li><a href="allergies.html" id="allergies" >Alergias</a></li>
-          <li><a href="#" id="substancies" >Substâncias</a></li>
-          <li><a href="products.html" id="products"  >Produtos</a></li>
-        </ul>
-      </div>
-  </nav><br>
-  <div class="container"><br>
-      <div class="row">
-        <form >
-          <div >
-            <div >
-              <h3>Substância</h3>
-              <label for="name">Nome</label>
-              <input type="text" id="name" class="form-control" required="true" ><br>
-              <label for="substancies">Substância</label>
-              <textarea type="text" id="substancies" class="form-control" required="true"></textarea><br>
-              <button class="btn btn-default" type="submit" id="submit" style="float:right">
-                Cadastrar   
-              </button>
-              
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand active" href="../../index.html">AllergyHelper</a>
             </div>
-          </div>
-         
-        </form>
-      </div>
-  </div><br>
-  <div id="substanciesList" class="container">
-      <table class="table">
-      <thead>
-              <tr>
-                  <th ng-model="name" >Nome</th>
-                  <th ng-model="desc">Descrição</th>
-          <th >Remover</th>
-          <th >Editar</th>
-              </tr>
-      </thead>
-      <tr ng-repeat="allergy in dataList">
-        <td ng-model="name">{{ allergy.commonName }}</td>
-        <td ng-model="desc">{{ allergy.desc }}</td>
-        <td><a href="" ng-click="dataList.$remove(allergy)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
-        <td><a href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
-        <td><button class="btn btn-default" disabled="disabled" ng-click="dataList.$save(allergy)" ><span class="glyphicon glyphicon glyphicon-ok"></span></button></td>
-        
-      </tr>
-    </table>
-  </div>
-  <script type="text/javascript">
-        var app = angular.module("substaciesApp",["firebase"]);
-        app.controller("substanciesCrtl",function($scope,$firebaseArray){
-          var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
-          $scope.dataList = $firebaseArray(ref);
-          var isInputRendered =true;
-          $scope.editItem = function(element){ 
-            var element = element.target;
-            $(element).closest('td').next('td').find('button').removeAttr('disabled');        
-          }
-        });
-  </script>
+            <ul class="nav navbar-nav">
+                <li><a href="allergies.html" id="allergies">Alergias</a></li>
+                <li><a href="#" id="substancies">Substâncias</a></li>
+                <li><a href="products.html" id="products">Produtos</a></li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+    <div class="container">
+        <br>
+        <div class="row">
+            <form>
+                <div>
+                    <div>
+                        <h3>Substância</h3>
+                        <label for="casNumber">Registro CAS</label>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <fieldset id="casnum">
+                                    <input type="text" size="6" maxlength="6">
+                                    <input type="text" size="2" maxlength="2">
+                                    <input type="text" size="1" maxlength="1">
+                                </fieldset>
+                            </div>
+                        </div>
+                        <label for="name">Nome</label>
+                        <input type="text" id="name" class="form-control" required="true">
+                        <br>
+                        <label for="substancies">Descrição</label>
+                        <textarea type="text" id="substancies" class="form-control" required="true"> </textarea>
+                        <br>
+                        <label>
+                            <input type="checkbox" id="checkboxSimilar">Similar
+                        </label>
+                        <br>
+                        <select class="subst-select form-control" style="width: 80%;" id="similarSelect" multiple="multiple" disabled></select>
+                        <br>
+                        <button class="btn btn-default" ng-click="someMethod()" type="submit" id="submit" style="float:right">Cadastrar
+                        </button>
+                        <br>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div id="substanciesList" class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th ng-model="name">Nome</th>
+                    <th ng-model="desc">Descrição</th>
+                    <th>Remover</th>
+                    <th>Editar</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="allergy in dataList">
+                <td ng-model="name">{{ allergy.commonName }}</td>
+                <td ng-model="desc">{{ allergy.desc }}</td>
+                <td><a href="" ng-click="dataList.$remove(allergy)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
+                <td><a href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
+                <td>
+                    <button class="btn btn-default" disabled="disabled" ng-click="dataList.$save(allergy)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--     <script type="text/javascript">
+    var app = angular.module("substaciesApp", ["firebase"]);
+    app.controller("substanciesCrtl", function($scope, $firebaseArray) {
+        var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
+        $scope.dataList = $firebaseArray(ref);
+        var isInputRendered = true;
+        $scope.editItem = function(argElement) {
+            var element = argElement.target;
+            $(element).closest('td').next('td').find('button').removeAttr('disabled');
+        };
+    });
+    </script>
+ -->
 </body>
+
 </html>
