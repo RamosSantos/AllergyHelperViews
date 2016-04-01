@@ -93,14 +93,14 @@
                 <tr ng-repeat="allergy in dataList">
                     <td ><input type="text" ng-model="allergy.commonName" disabled="disabled" class="input-table-disable" /></td>
                     <td ><input type="text" ng-model="allergy.desc" disabled="disabled" class="input-table-disable"  /></td>
-					<td ><input type="text" ng-model="allergy.cas" disabled="disabled" class="input-table-disable"  /></td>
+					<td ><input type="text" ng-model="allergy.cas" maxlength="7" disabled="disabled" class="input-table-disable"  /></td>
 					<td>
                         <button class="btn btn-default"  data-toggle="modal" data-target="#similar-modal" ng-show="allergy.isSimilar"><span class="glyphicon glyphicon-plus"></span></button>
                     </td>
-                    <td><a class="btn btn-default" href="" ng-click="dataList.$remove(allergy)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
+                    <td><a class="btn btn-danger" href="" ng-click="dataList.$remove(allergy)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
                     <td><a class="btn btn-default" href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
                     <td>
-                        <button class="btn btn-default" disabled="disabled" ng-click="dataList.$save(allergy)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
+                        <button class="btn btn-primary btn-save" disabled="disabled" ng-click="dataList.$save(allergy)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
                     </td>
                 </tr>
             </table>
@@ -117,10 +117,11 @@
 			  <h4 class="modal-title">Substâncias Similares</h4>
 			</div>
 			<div class="modal-body">
-			  <p>{{dataList}}</p>
+			  <textarea class="area-select2" >{{dataList}}</textarea>
 			</div>
 			<div class="modal-footer">
-			  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" ng-click="changeSimilar()" >Salvar</button>
+				
 			</div>
 		  </div>
 		  

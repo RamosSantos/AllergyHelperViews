@@ -73,11 +73,11 @@ app.controller("substanciesCrtl", function($scope, $firebaseObject,$timeout) {
 		$scope.$apply(function(){
 			$scope.loader=false;
 		});
-	},1000);
+	},1200);
 	
     $scope.submitForm = function(){
         var casnum = $scope.casnum1+$scope.casnum2+$scope.casnum3;       
-    };
+    }
 
     
     $scope.editItem = function(argElement) {
@@ -87,5 +87,19 @@ app.controller("substanciesCrtl", function($scope, $firebaseObject,$timeout) {
 			$(this).children().removeAttr('disabled');
 			$(this).children("input[type='text']").removeClass('input-table-disable').addClass('form-control');
 		})
-    };
+    }
+	
+	$scope.saveSimilar = function(){
+		console.log("Saved")
+	}
+	
 });
+
+$(".btn-save").click(function(){
+	var element = $(this).parent().closest('tr');
+	console.log(element);
+	$(element).find("td").each(function(){
+		$(this).children().Attr('disabled','disabled');
+		$(this).children("input[type='text']").removeClass('form-control').addClass('input-table-disable');
+	})
+})
