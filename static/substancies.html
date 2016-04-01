@@ -43,7 +43,7 @@
                     <label>
                         <input type="checkbox" ng-model="substance.isSimilar" ng-init="substance.isSimilar=false" ng-change="similarChange()" id="checkboxSimilar">Similar</label>
                     <br>
-                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" ng-model="substance.similarTo" disabled></select>
+                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" style="width: 100%" ng-model="substance.similarTo" disabled></select>
                     <br>
                     <br>
                     <button class="btn btn-primary" type="submit" ng-click="addSubstance()" id="submit" style="float:right">Cadastrar
