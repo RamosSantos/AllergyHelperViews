@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   
     <!--Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <!-- Select2 stylesheet -->
     <link href="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.css" rel="stylesheet" />
     <!-- CSS GERAL -->
     <link rel="stylesheet" type="text/css" href="..\resources\css\style.css">
+    <link rel="stylesheet" type="text/css" href="http://filamentgroup.github.io/politespace/dist/politespace.css">
     <title></title>
     <link rel="stylesheet" href="">
 </head>
@@ -20,57 +20,35 @@
         <a class="" href="nn\..\..\index.html">
             <img src="..\resources\img\logo.png" alt="">
         </a>
-        <nav  id="navcontainer">            
+        <nav id="navcontainer">
             <a href="allergies.html" id="allergies">Alergias</a>
             <a href="#" id="substancies">Substâncias</a>
             <a href="products.html" id="products">Produtos</a>
         </nav>
     </div>
-    
     <br>
     <div class="container">
         <br>
         <div class="row">
-            <form>
+            <form name="substanceCreate">
                 <div>
-                    <div>
-                        <h3>Substância</h3>
-                        <label for="casNumber">Registro CAS</label>
-                        <div class="form-group">
-                            <div class="form-group">
-                                <fieldset id="casnum">
-                                    <div class="row">
-                                        <div class="col-md-2 ">
-                                            <input type="text" size="6" maxlength="6" class="form-control" ng-model="casnum1">    
-                                        </div>
-                                        <div class="col-md-2 ">
-                                             <input type="text" size="2" maxlength="2" class="form-control" ng-model="casnum2">
-                                        </div>
-                                        <div class="col-md-2 ">
-                                            <input type="text" size="1" maxlength="1" class="form-control" ng-model="casnum3">
-                                        </div>
-                                        
-                                    </div>
-                                    
-                                </fieldset>
-                            </div>
-                        </div>
-                        <label for="name">Nome</label>
-                        <input type="text" id="name" class="form-control" required="true">
-                        <br>
-                        <label for="substancies">Descrição</label>
-                        <textarea type="text" id="substancies" class="form-control" required="true"> </textarea>
-                        <br>
-                        <label>
-                            <input type="checkbox" id="checkboxSimilar">Similar
-                        </label>
-                        <br>
-                        <select class="subst-select form-control"  id="similarSelect" multiple="multiple" disabled></select>
-                        <br><br>
-                        <button class="btn btn-primary" ng-click="submitForm()" type="submit" id="submit" style="float:right">Cadastrar
-                        </button>
-                        <br>
-                    </div>
+                    <label for="cas">CAS</label>
+                    <input id="cas" type="text" data-politespace data-grouplength="1,2,7" data-delimiter="-" maxlength="9" data-reverse class="form-control" ng-model="substance.cas" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                    <label for="name">Nome</label>
+                    <input type="text" id="name" ng-model="substance.commonName" class="form-control" required="true">
+                    <br>
+                    <label for="substancies">Descrição</label>
+                    <textarea type="text" id="desc" ng-model="substance.desc" class="form-control"> </textarea>
+                    <br>
+                    <label>
+                        <input type="checkbox" ng-model="substance.isSimilar" ng-init="substance.isSimilar=false" ng-change="similarChange()" id="checkboxSimilar">Similar</label>
+                    <br>
+                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" ng-model="substance.similarTo" disabled></select>
+                    <br>
+                    <br>
+                    <button class="btn btn-primary" type="submit" ng-click="addSubstance()" id="submit" style="float:right">Cadastrar
+                    </button>
+                    <br>
                 </div>
             </form>
         </div>
@@ -78,24 +56,30 @@
     <br>
     <div id="substanciesList" class="container">
         <form>
-			<img src="..\resources\img\loader.gif" ng-show="loader" width="140" height="140" style="left:45%;position:relative">
+            <img src="..\resources\img\loader.gif" ng-show="loader" width="140" height="140" style="left:45%;position:relative">
             <table class="table table-items " ng-hide="loader">
                 <thead>
                     <tr>
                         <th>Nome</th>
                         <th>Descrição</th>
-						<th>Casnumber</th>
-						<th>Similar</th>
+                        <th>Casnumber</th>
+                        <th>Similar</th>
                         <th>Remover</th>
                         <th>Editar</th>
                     </tr>
                 </thead>
                 <tr ng-repeat="allergy in dataList">
-                    <td ><input type="text" ng-model="allergy.commonName" disabled="disabled" class="input-table-disable" /></td>
-                    <td ><input type="text" ng-model="allergy.desc" disabled="disabled" class="input-table-disable"  /></td>
-					<td ><input type="text" ng-model="allergy.cas" maxlength="7" disabled="disabled" class="input-table-disable"  /></td>
-					<td>
-                        <button class="btn btn-default"  data-toggle="modal" data-target="#similar-modal" ng-show="allergy.isSimilar"><span class="glyphicon glyphicon-plus"></span></button>
+                    <td>
+                        <input type="text" ng-model="allergy.commonName" disabled="disabled" class="input-table-disable" />
+                    </td>
+                    <td>
+                        <input type="text" ng-model="allergy.desc" disabled="disabled" class="input-table-disable" />
+                    </td>
+                    <td>
+                        <input type="text" ng-model="allergy.cas" maxlength="7" disabled="disabled" class="input-table-disable" />
+                    </td>
+                    <td>
+                        <button class="btn btn-default" data-toggle="modal" data-target="#similar-modal" ng-show="allergy.isSimilar"><span class="glyphicon glyphicon-plus"></span></button>
                     </td>
                     <td><a class="btn btn-danger" href="" ng-click="dataList.$remove(allergy)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
                     <td><a class="btn btn-default" href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
@@ -106,31 +90,28 @@
             </table>
         </form>
     </div>
-	<!-- Modal -->
-	  <div class="modal fade" id="similar-modal" role="dialog">
-		<div class="modal-dialog">
-		
-		  <!-- Modal content-->
-		  <div class="modal-content">
-			<div class="modal-header">
-			  <button type="button" class="close" data-dismiss="modal">&times;</button>
-			  <h4 class="modal-title">Substâncias Similares</h4>
-			</div>
-			<div class="modal-body">
-			  <textarea class="area-select2" >{{dataList}}</textarea>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" ng-click="changeSimilar()" >Salvar</button>
-				
-			</div>
-		  </div>
-		  
-		</div>
-	  </div>
-	  
-	</div>
-    <br><br>
-     <!-- AngularJS -->
+    <!-- Modal -->
+    <div class="modal fade" id="similar-modal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Substâncias Similares</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea class="area-select2">{{dataList}}</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="changeSimilar()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <br>
+    <br>
+    <!-- AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
     <!-- Firebase -->
     <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
@@ -140,12 +121,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
     <!-- Select2 -->
     <script src="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.full.js"></script>
+    <!-- Load local lib and tests. -->
+    <!-- Politespace -->
+    <script src="http://filamentgroup.github.io/politespace/dist/politespace.js"></script>
+    <script>
+    jQuery(function() {
+        jQuery(document).trigger("enhance");
+    });
+    </script>
     <!-- Controller Substancies -->
     <script type="text/javascript" src="..\resources\js\new\substancescript.js"></script>
-	<!--Bootstrap JS-->
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-</head>
-  
+    <!--Bootstrap JS-->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </body>
 
 </html>

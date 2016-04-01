@@ -1,9 +1,4 @@
 $(function() {
-
-    $(".similar-enabler").on("click", function() {
-        $(".subst-select").prop("disabled", false);
-    });
-
     $(".subst-select").select2({
         placeholder: 'Use o enter para separar as substancias.',
         minimumInputLength: 2,
@@ -46,60 +41,87 @@ $(function() {
             }
         }
     });
-
-    $('.form-control.casnum').on('keyup', function() {
-        var limit = parseInt($(this).attr('maxlength'));
-        if (this.value.length === limit) {
-            $(this).next().focus();
-        }
-    });
-
-    $("#checkboxSimilar").change(function() {
-        var test = $(".subst-select").is(':disabled');
-        $(".subst-select").prop("disabled", test ? false : true);
-    });
 });
 
 
 var app = angular.module("substaciesApp", ["firebase"]);
-app.controller("substanciesCrtl", function($scope, $firebaseObject,$timeout) {
+app.controller("substanciesCrtl", function($scope, $firebaseArray, $timeout) {
     var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
-    var obj = $firebaseObject(ref);
-	$scope.loader = true;
-	
-	$scope.dataList = obj;
-	
-	$timeout(function(){
-		$scope.$apply(function(){
-			$scope.loader=false;
-		});
-	},1200);
-	
-    $scope.submitForm = function(){
-        var casnum = $scope.casnum1+$scope.casnum2+$scope.casnum3;       
-    }
+    // var obj = $firebaseObject(ref);
+    var arr = $firebaseArray(ref);
+    $scope.loader = true;
 
-    
+    $scope.dataList = arr;
+
+    $timeout(function() {
+        $scope.$apply(function() {
+            $scope.loader = false;
+        });
+    }, 1200);
+
+    $scope.similarChange = function() {
+        var test = $(".subst-select").is(':disabled');
+        $(".subst-select").prop("disabled", test ? false : true);
+    };
+
     $scope.editItem = function(argElement) {
         var element = argElement.target;
-		element = $(element).parent().parent().closest('tr');
-        $(element).find("td").each(function(){
-			$(this).children().removeAttr('disabled');
-			$(this).children("input[type='text']").removeClass('input-table-disable').addClass('form-control');
-		})
-    }
-	
-	$scope.saveSimilar = function(){
-		console.log("Saved")
-	}
-	
+        element = $(element).parent().parent().closest('tr');
+        $(element).find("td").each(function() {
+            $(this).children().removeAttr('disabled');
+            $(this).children("input[type='text']").removeClass('input-table-disable').addClass('form-control');
+        });
+    };
+
+    $scope.addSubstance = function() {
+        var substance = $scope.substance;
+        substance.lowerCaseName = substance.commonName.toLowerCase();
+        var arrSimilars = $(".subst-select").val();
+        var similarTo = {};
+        if (arrSimilars !== null) {
+            arrSimilars.forEach(function(item) {
+                similarTo[item] = true;
+            });
+            substance.similarTo = similarTo;
+        } else {
+            substance.isSimilar = false;
+        }
+        $scope.dataList.$add(substance);
+    };
+
+    $scope.saveSimilar = function() {
+        console.log("Saved");
+    };
+
 });
 
-$(".btn-save").click(function(){
-	var element = $(this).parent().closest('tr');
-	console.log(element);
-	$(element).find("td").each(function(){
-		$(this).children().Attr('disabled','disabled');
-		$(this).children("input[type='text']").removeClass('form-control').addClass('input-table-disable');
-	})
-})
+// app.controller("substanciesCrtl", function($scope, $firebaseArray) {
+//     var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
+//     var obj = $firebaseArray(ref);
+//     $scope.dataList = obj;
+
+//     $scope.addSubstance = function() {
+//         var substance = $scope.substance;
+//         substance.lowerCaseName = substance.commonName.toLowerCase();
+//         var arrSimilars = $(".subst-select").val();
+//         var similarTo = {};
+//         if (arrSimilars !== null) {
+//             arrSimilars.forEach(function(item) {
+//                 similarTo[item] = true;
+//             });
+//             substance.similarTo = similarTo;
+//         } else {
+//             substance.isSimilar = false;
+//         }
+//         $scope.dataList.$add(substance);
+//     };
+// });
+
+$(".btn-save").click(function() {
+    var element = $(this).parent().closest('tr');
+    console.log(element);
+    $(element).find("td").each(function() {
+        $(this).children().Attr('disabled', 'disabled');
+        $(this).children("input[type='text']").removeClass('form-control').addClass('input-table-disable');
+    });
+});
