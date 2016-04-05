@@ -43,12 +43,17 @@
                     <label>
                         <input type="checkbox" ng-model="substance.isSimilar" ng-init="substance.isSimilar=false" ng-change="similarChange()" id="checkboxSimilar">Similar</label>
                     <br>
-                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" style="width: 100%" ng-model="substance.similarTo" disabled></select>
+                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" ng-model="substance.similarTo" disabled></select>
                     <br>
                     <br>
                     <button class="btn btn-primary" type="submit" ng-click="addSubstance()" id="submit" style="float:right">Cadastrar
                     </button>
                     <br>
+					<div>
+						<span id="messages">
+							
+						</span>
+					</div>
                 </div>
             </form>
         </div>
@@ -60,6 +65,7 @@
             <table class="table table-items " ng-hide="loader">
                 <thead>
                     <tr>
+						<th></th>
                         <th>Nome</th>
                         <th>Descrição</th>
                         <th>Casnumber</th>
@@ -69,6 +75,9 @@
                     </tr>
                 </thead>
                 <tr ng-repeat="allergy in dataList">
+					<td>
+                        <input type="hidden"  disabled="disabled" class="input-table-disable" value="{{allergy.$id}}"/>
+                    </td>
                     <td>
                         <input type="text" ng-model="allergy.commonName" disabled="disabled" class="input-table-disable" />
                     </td>
@@ -79,7 +88,7 @@
                         <input type="text" ng-model="allergy.cas" maxlength="7" disabled="disabled" class="input-table-disable" />
                     </td>
                     <td>
-                        <button class="btn btn-default" data-toggle="modal" data-target="#similar-modal" ng-show="allergy.isSimilar"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#similar-modal" ng-show="allergy.hasSimilarTo"><span class="glyphicon glyphicon-plus"></span></button>
                     </td>
                     <td><a class="btn btn-danger" href="" ng-click="dataList.$remove(allergy)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
                     <td><a class="btn btn-default" href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
@@ -88,6 +97,7 @@
                     </td>
                 </tr>
             </table>
+			
         </form>
     </div>
     <!-- Modal -->
@@ -100,7 +110,12 @@
                     <h4 class="modal-title">Substâncias Similares</h4>
                 </div>
                 <div class="modal-body">
-                    <textarea class="area-select2">{{dataList}}</textarea>
+                    <div class="area-select2">
+						<select class="form-control selected-subs" id="selectedSubs" multiple="multiple" ng-model="selectSubs" >
+
+                        </select>
+                        
+					</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" ng-click="changeSimilar()">Salvar</button>

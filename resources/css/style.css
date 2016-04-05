@@ -43,7 +43,7 @@
   background-color: #fff;
   padding: 3%;
   margin-bottom: 10px;
-  width:90%;
+  width:95%;
 }
 
 .input-table-disable{
@@ -56,5 +56,11 @@
 	width:570px;
 	height:300px;
 	resize:none;
+}
+
+#messages{
+	font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size:20px;
+	color #337AB7;
 }
 

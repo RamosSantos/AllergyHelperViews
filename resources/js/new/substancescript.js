@@ -47,7 +47,6 @@ $(function() {
 var app = angular.module("substaciesApp", ["firebase"]);
 app.controller("substanciesCrtl", function($scope, $firebaseArray, $timeout) {
     var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
-    // var obj = $firebaseObject(ref);
     var arr = $firebaseArray(ref);
     $scope.loader = true;
 
@@ -78,16 +77,38 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $timeout) {
         substance.lowerCaseName = substance.commonName.toLowerCase();
         var arrSimilars = $(".subst-select").val();
         var similarTo = {};
+        
         if (arrSimilars !== null) {
             arrSimilars.forEach(function(item) {
                 similarTo[item] = true;
+                substance.hasSimilarTo = true; 
             });
             substance.similarTo = similarTo;
         } else {
             substance.isSimilar = false;
         }
-        $scope.dataList.$add(substance);
+        $scope.dataList.$add(substance).then(function(){
+			$("#messages").html("Salvo com sucesso").fadeIn(function(){
+				$(this).fadeOut(3000);
+				$scope.substance = "";
+			});
+		});
+		
     };
+	
+	$scope.selectModal = function(argElement){
+		var element = argElement.target
+		var value = $(element).parent().closest("tr").find("td:first").children().val();
+		var URL = "https://allergyhelper3.firebaseio.com/substancies/"+value+".json?";
+		xhr = new XMLHttpRequest();
+        xhr.open("GET", URL, false);
+        xhr.send();
+        var resp = xhr.responseText;
+        resp = JSON.stringify(eval('(' + resp + ')'));
+        resp = JSON.parse(resp);
+        $scope.selectSubs = resp;
+        
+	}
 
     $scope.saveSimilar = function() {
         console.log("Saved");
