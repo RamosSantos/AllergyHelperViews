@@ -106,7 +106,20 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $timeout) {
         var resp = xhr.responseText;
         resp = JSON.stringify(eval('(' + resp + ')'));
         resp = JSON.parse(resp);
-        $scope.selectSubs = resp;
+        data = []
+        var $element = $('#selectedSubs');
+        for (item in resp.similarTo) {
+          data.push(item)
+          var select = document.getElementById('selectedSubs');
+          var option = new Option(item,item,true,true);
+          $element.append(option);
+        }
+
+       $element.select2({
+         data : data,
+         tags : true
+        })
+
         
 	}
 
