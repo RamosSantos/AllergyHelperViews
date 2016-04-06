@@ -43,7 +43,7 @@
                     <label>
                         <input type="checkbox" ng-model="substance.isSimilar" ng-init="substance.isSimilar=false" ng-change="similarChange()" id="checkboxSimilar">Similar</label>
                     <br>
-                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" ng-model="substance.similarTo" disabled></select>
+                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" style="width: 100%"  ng-model="substance.similarTo" disabled></select>
                     <br>
                     <br>
                     <button class="btn btn-primary" type="submit" ng-click="addSubstance()" id="submit" style="float:right">Cadastrar
@@ -74,26 +74,26 @@
                         <th>Editar</th>
                     </tr>
                 </thead>
-                <tr ng-repeat="allergy in dataList">
+                <tr ng-repeat="substItem in substList">
 					<td>
-                        <input type="hidden"  disabled="disabled" class="input-table-disable" value="{{allergy.$id}}"/>
+                        <input type="hidden"  disabled="disabled" class="input-table-disable" value="{{substItem.$id}}"/>
                     </td>
                     <td>
-                        <input type="text" ng-model="allergy.commonName" disabled="disabled" class="input-table-disable" />
+                        <input type="text" ng-model="substItem.commonName" disabled="disabled" class="input-table-disable" />
                     </td>
                     <td>
-                        <input type="text" ng-model="allergy.desc" disabled="disabled" class="input-table-disable" />
+                        <input type="text" ng-model="substItem.desc" disabled="disabled" class="input-table-disable" />
                     </td>
                     <td>
-                        <input type="text" ng-model="allergy.cas" maxlength="7" disabled="disabled" class="input-table-disable" />
+                        <input type="text" ng-model="substItem.cas" maxlength="7" disabled="disabled" class="input-table-disable" />
                     </td>
                     <td>
-                        <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#similar-modal" ng-show="allergy.hasSimilarTo"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#similar-modal" ng-show="substItem.isSimilar"><span class="glyphicon glyphicon-plus"></span></button>
                     </td>
-                    <td><a class="btn btn-danger" href="" ng-click="dataList.$remove(allergy)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
+                    <td><a class="btn btn-danger" href="" ng-click="substList.$remove(substItem)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
                     <td><a class="btn btn-default" href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
                     <td>
-                        <button class="btn btn-primary btn-save" disabled="disabled" ng-click="dataList.$save(allergy)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
+                        <button class="btn btn-primary btn-save" disabled="disabled" ng-click="substList.$save(substItem)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
                     </td>
                 </tr>
             </table>
