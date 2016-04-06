@@ -43,17 +43,17 @@
                     <label>
                         <input type="checkbox" ng-model="substance.isSimilar" ng-init="substance.isSimilar=false" ng-change="similarChange()" id="checkboxSimilar">Similar</label>
                     <br>
-                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" style="width: 100%"  ng-model="substance.similarTo" disabled></select>
+                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" style="width: 100%" ng-model="substance.similarTo" disabled></select>
                     <br>
                     <br>
                     <button class="btn btn-primary" type="submit" ng-click="addSubstance()" id="submit" style="float:right">Cadastrar
                     </button>
                     <br>
-					<div>
-						<span id="messages">
-							
-						</span>
-					</div>
+                    <div>
+                        <span id="messages">
+                            
+                        </span>
+                    </div>
                 </div>
             </form>
         </div>
@@ -65,7 +65,7 @@
             <table class="table table-items " ng-hide="loader">
                 <thead>
                     <tr>
-						<th></th>
+                        <th></th>
                         <th>Nome</th>
                         <th>Descrição</th>
                         <th>Casnumber</th>
@@ -75,8 +75,8 @@
                     </tr>
                 </thead>
                 <tr ng-repeat="substItem in substList">
-					<td>
-                        <input type="hidden"  disabled="disabled" class="input-table-disable" value="{{substItem.$id}}"/>
+                    <td>
+                        <input type="hidden" disabled="disabled" class="input-table-disable" value="{{substItem.$id}}" />
                     </td>
                     <td>
                         <input type="text" ng-model="substItem.commonName" disabled="disabled" class="input-table-disable" />
@@ -97,7 +97,6 @@
                     </td>
                 </tr>
             </table>
-			
         </form>
     </div>
     <!-- Modal -->
@@ -111,11 +110,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="area-select2">
-						<select class="form-control selected-subs" id="selectedSubs" multiple="multiple" ng-model="selectSubs" style="width:100%" >
-
-                        </select>
-
-					</div>
+                        <select class="subst-select form-control" id="modalSimSelect" multiple="multiple" style="width: 100%" ng-model="substance.similarTo" ></select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" ng-click="changeSimilar()">Salvar</button>

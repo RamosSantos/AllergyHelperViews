@@ -76,6 +76,9 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
         var substance = $scope.substance;
         substance.lowerCaseName = substance.commonName.toLowerCase();
         var arrSimilars = $(".subst-select").val();
+        var arrSimilars2 = $(".similarSelect").select2('data');
+        var arrSimilars3 = $("#similarSelect").select2('data');
+
         var similarTo = {};
 
         if (arrSimilars !== null) {
@@ -96,99 +99,48 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
 
     };
 
-    function getModelsByIds(keys) {
-        var models = [];
-        // var blah = [];
-        // blah.push(keys.forEach(function(v, i) {
-        //     var ref = new Firebase('https://allergyhelper3.firebaseio.com/substancies/' + keys[i]);
-        //     var obj = $firebaseObject(ref);
-        //     console.log(ref);
-        //     return obj;
-        // }));
+    // function getModelsByIds(keys) {
+    //     var models = [];
+    //     $("#modalSimSelect").select2("data", [{ "id": "2127", "text": "Henry Ford" }, { "id": "2199", "text": "Tom Phillips" }]);
+    //     var promisses = [];
+    //     for (var i in keys) {
+    //         var ref = new Firebase('https://allergyhelper3.firebaseio.com/substancies/' + keys[i]);
+    //         var obj = $firebaseObject(ref);
+    //         promisses.push(obj.$loaded());
+    //     }
+    //     Promise.all(promisses).then(function(values) {
+    //         console.log(values); // [3, 1337, "foo"] 
 
-        // var p3 = new Promise(function(resolve, reject) {
-        //     setTimeout(resolve, 100, "foo");
-        // });
+    //     });
 
-
-        // res.end();
-        var promisses = [];
-        for (var i in keys) {
-            var ref = new Firebase('https://allergyhelper3.firebaseio.com/substancies/' + keys[i]);
-            var obj = $firebaseObject(ref);
-            promisses.push(obj.$loaded());
-        }
-        Promise.all(promisses).then(function(values) {
-            return
-            console.log(values); // [3, 1337, "foo"] 
-        });
-    }
+    // }
 
     $scope.selectModal = function(argElement) {
+        var promisses = [];
+        var data = [];
+        var $element = $("#modalSimSelect");
         var item = this.substItem.similarTo;
 
         var keys = $.map(item, function(v, i) {
             return i;
         });
-        // var onekey = keys[0];
 
-        // var blah = getModelsByIds(keys);
-
-        // var ref = new Firebase('https://allergyhelper3.firebaseio.com/substancies/');
-
-        // var obj = $firebaseObject(ref);
-        // obj.child('users').child(id).
-
-        // obj.$loaded().then(function(res) {
-
-        //     console.log(res); // res will be the room object
-
-        //     // To iterate the key/value pairs of the object, use angular.forEach()
-        //     angular.forEach(obj, function(value, key) {
-        //         console.log(key, value);
-        //     });
-        // });
-
-        // var element = argElement.target;
-        // var value = $(element).parent().closest("tr").find("td:first").children().val();
-        // var URL = "https://allergyhelper3.firebaseio.com/substancies/" + value + ".json?";
-        // xhr = new XMLHttpRequest();
-        // xhr.open("GET", URL, false);
-        // xhr.send();
-        // var resp = xhr.responseText;
-        // resp = JSON.stringify(eval('(' + resp + ')'));
-        // resp = JSON.parse(resp);
-        // data = [];
-        var promisses = [];
-        for (var i in keys) {
-            var ref = new Firebase('https://allergyhelper3.firebaseio.com/substancies/' + keys[i]);
-            var obj = $firebaseObject(ref);
-            promisses.push(obj.$loaded());
-        }
-        Promise.all(promisses).then(function(values) {
-            console.log(values); // [3, 1337, "foo"] 
-            var $element = $('#selectedSubs');
-            // for (var item in values) {
-            //     data.push(item);
-            //     var select = document.getElementById('selectedSubs');
-            //     var option = new Option(item, item, true, true);
-            //     $element.append(option);
-            // }
-                  $element.select2("val", values);
+        $("#modalSimSelect").select2({
+            initSelection: function(element, callback) {
+                for (var i in keys) {
+                    var ref = new Firebase('https://allergyhelper3.firebaseio.com/substancies/' + keys[i]);
+                    var obj = $firebaseObject(ref);
+                    promisses.push(obj.$loaded());
+                }
+                Promise.all(promisses).then(function(values) {
+                    console.log(values); // [3, 1337, "foo"] 
+                    return callback(values);
+                });
+            },
         });
 
-        // var $element = $('#selectedSubs');
-        // for (var item in resp.similarTo) {
-        //     data.push(item);
-        //     var select = document.getElementById('selectedSubs');
-        //     var option = new Option(item, item, true, true);
-        //     $element.append(option);
-        // }
 
-        // $element.select2({
-        //     data: data,
-        //     tags: true
-        // });
+
     };
 
     $scope.saveSimilar = function() {
