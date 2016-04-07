@@ -109,9 +109,13 @@
                     <h4 class="modal-title">Substâncias Similares</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="area-select2">
-                        <select class="subst-select form-control" id="modalSimSelect" multiple="multiple" style="width: 100%" ng-model="substance.similarTo" ></select>
+                    <form class="form-horizontal" name="test">
+                    <div class="form-group" data-ng-controller="testCtrl1">
+                        <label class="control-label">Pick List Test 2</label>
+                            <picklist name="pktest1" data-pick-options="v.value as v.name for v in toptions" data-picklist="" data-pick-model="tselected">
+                            </picklist>
                     </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" ng-click="changeSimilar()">Salvar</button>
@@ -144,6 +148,7 @@
     <script type="text/javascript" src="..\resources\js\new\substancescript.js"></script>
     <!--Bootstrap JS-->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="..\resources\js\picklist.js"></script>
 </body>
 
 </html>

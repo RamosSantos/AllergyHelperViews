@@ -44,13 +44,18 @@ $(function() {
 });
 
 
-var app = angular.module("substaciesApp", ["firebase"]);
+var app = angular.module("substaciesApp", ["firebase", "fxpicklist"]);
 app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObject, $timeout) {
     var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
     var arr = $firebaseArray(ref);
     $scope.loader = true;
 
     $scope.substList = arr;
+
+    $scope.testCtrl1 = function(){
+        $scope.toptions=new Array();
+        $scope.tselected=new Array();
+    };
 
     $timeout(function() {
         $scope.$apply(function() {
@@ -71,6 +76,8 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
             $(this).children("input[type='text']").removeClass('input-table-disable').addClass('form-control');
         });
     };
+
+
 
     $scope.addSubstance = function() {
         var substance = $scope.substance;
@@ -121,6 +128,16 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
         var $element = $("#modalSimSelect");
         var item = this.substItem.similarTo;
 
+        for(var i=0; i<10; i++){
+            $scope.toptions.push({
+                name: " display name"+i,
+                value: "value"+i,
+                index: i
+            });
+        }
+
+        $scope.tselected=[$scope.toptions[4].value, $scope.toptions[5].value];
+
         var keys = $.map(item, function(v, i) {
             return i;
         });
@@ -144,6 +161,9 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
     };
 
     $scope.saveSimilar = function() {
+        console.log("Saved");
+    };
+    $scope.changeSimilar = function() {
         console.log("Saved");
     };
 
