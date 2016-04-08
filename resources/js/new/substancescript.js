@@ -48,13 +48,13 @@ var app = angular.module("substaciesApp", ["firebase", "fxpicklist"]);
 app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObject, $timeout) {
     var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
     var arr = $firebaseArray(ref);
+    var obj = $firebaseObject(ref);
     $scope.loader = true;
 
     $scope.substList = arr;
-
+    $scope.substMap = obj;
     $scope.testCtrl1 = function() {
-        $scope.toptions = new Array();
-        $scope.tselected = new Array();
+
     };
 
     $timeout(function() {
@@ -125,37 +125,47 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
     $scope.selectModal = function(argElement) {
         var promisses = [];
         var data = [];
-        var $element = $("#modalSimSelect");
         var currentSimilars;
-        var list = $scope.substList;
-        $scope.toptions = list;
-        var populated = new Array();
+        var list = $scope.substMap;
+        $scope.toPickMap = {};
+        $scope.substMap = list;
         if (this.substItem.similarTo !== undefined) {
             currentSimilars = this.substItem.similarTo;
             var keys = $.map(currentSimilars, function(v, i) {
                 return i;
             });
-            for (var i = 0; i < list.length; i++) {
-                for (var j = 0; j < keys.length; j++) {
-                    if (keys[j] === list[i].$id) {
-                        console.log($scope.toptions[i]);
-                        $scope.tselected.push($scope.toptions[i]);
-                        $scope.tselected[($scope.tselected.length-1)].name = ($scope.toptions[i].commonName);
-                    }
+            for (var j = 0; j < keys.length; j++) {
+                if (keys[j] in list) {
+                    $scope.toPickMap[keys[j]] = list[keys[j]];
+                    delete $scope.substMap[keys[j]];
                 }
             }
         }
-        console.log(populated);
-                // $scope.tselected=populated;
+        // var populated = new Array();
+        // if (this.substItem.similarTo !== undefined) {
+        //     currentSimilars = this.substItem.similarTo;
+        //     var keys = $.map(currentSimilars, function(v, i) {
+        //         return i;
+        //     });
+        //     for (var i = 0; i < list.length; i++) {
+        //         for (var j = 0; j < keys.length; j++) {
+        //             if (keys[j] === list[i].$id) {
+        //                 $scope.lSetOrChoosen.push($scope.rAvailable[i]);
+        //                 $scope.rAvailable.splice( i, 1 );
+        //             }
+        //         }
+        //     }
+        // }
+        // $scope.lSetOrChoosen=populated;
         // for(var i=0; i<10; i++){
-        //     $scope.toptions.push({
+        //     $scope.rAvailable.push({
         //         name: " display name"+i,
         //         value: "value"+i,
         //         index: i
         //     });
         // }
 
-        // $scope.tselected=[$scope.toptions[4].value, $scope.toptions[5].value];
+        // $scope.lSetOrChoosen=[$scope.rAvailable[4].value, $scope.rAvailable[5].value];
 
         // var keys = $.map(item, function(v, i) {
         //     return i;
@@ -180,10 +190,12 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
     };
 
     $scope.saveSimilar = function() {
-        console.log("Saved");
+        console.log(arr);
+        console.log(obj);
     };
     $scope.changeSimilar = function() {
-        console.log("Saved");
+        console.log(arr);
+        console.log(obj);
     };
 
 });
