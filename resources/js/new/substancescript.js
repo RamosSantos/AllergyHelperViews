@@ -127,14 +127,15 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
         var data = [];
         var $element = $("#modalSimSelect");
         var item = this.substItem.similarTo;
-
-        for(var i=0; i<10; i++){
-            $scope.toptions.push({
-                name: " display name"+i,
-                value: "value"+i,
-                index: i
-            });
-        }
+        var list = $scope.substList ;
+        $scope.toptions = list;
+        // for(var i=0; i<10; i++){
+        //     $scope.toptions.push({
+        //         name: " display name"+i,
+        //         value: "value"+i,
+        //         index: i
+        //     });
+        // }
 
         $scope.tselected=[$scope.toptions[4].value, $scope.toptions[5].value];
 
