@@ -52,9 +52,9 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
 
     $scope.substList = arr;
 
-    $scope.testCtrl1 = function(){
-        $scope.toptions=new Array();
-        $scope.tselected=new Array();
+    $scope.testCtrl1 = function() {
+        $scope.toptions = new Array();
+        $scope.tselected = new Array();
     };
 
     $timeout(function() {
@@ -126,9 +126,27 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
         var promisses = [];
         var data = [];
         var $element = $("#modalSimSelect");
-        var item = this.substItem.similarTo;
-        var list = $scope.substList ;
+        var currentSimilars;
+        var list = $scope.substList;
         $scope.toptions = list;
+        var populated = new Array();
+        if (this.substItem.similarTo !== undefined) {
+            currentSimilars = this.substItem.similarTo;
+            var keys = $.map(currentSimilars, function(v, i) {
+                return i;
+            });
+            for (var i = 0; i < list.length; i++) {
+                for (var j = 0; j < keys.length; j++) {
+                    if (keys[j] === list[i].$id) {
+                        console.log($scope.toptions[i]);
+                        $scope.tselected.push($scope.toptions[i]);
+                        $scope.tselected[($scope.tselected.length-1)].name = ($scope.toptions[i].commonName);
+                    }
+                }
+            }
+        }
+        console.log(populated);
+                // $scope.tselected=populated;
         // for(var i=0; i<10; i++){
         //     $scope.toptions.push({
         //         name: " display name"+i,
@@ -137,11 +155,11 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
         //     });
         // }
 
-        $scope.tselected=[$scope.toptions[4].value, $scope.toptions[5].value];
+        // $scope.tselected=[$scope.toptions[4].value, $scope.toptions[5].value];
 
-        var keys = $.map(item, function(v, i) {
-            return i;
-        });
+        // var keys = $.map(item, function(v, i) {
+        //     return i;
+        // });
 
         $("#modalSimSelect").select2({
             initSelection: function(element, callback) {
