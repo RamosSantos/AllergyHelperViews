@@ -77,34 +77,18 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
         });
     };
 
-
-
-    $scope.addSubstance = function() {
-        var substance = $scope.substance;
-        substance.lowerCaseName = substance.commonName.toLowerCase();
-        var arrSimilars = $(".subst-select").val();
-        var arrSimilars2 = $(".similarSelect").select2('data');
-        var arrSimilars3 = $("#similarSelect").select2('data');
-
-        var similarTo = {};
-
-        if (arrSimilars !== null) {
-            arrSimilars.forEach(function(item) {
-                similarTo[item] = true;
-                substance.hasSimilarTo = true;
-            });
-            substance.similarTo = similarTo;
-        } else {
-            substance.isSimilar = false;
-        }
-        $scope.dataList.$add(substance).then(function() {
-            $("#messages").html("Salvo com sucesso").fadeIn(function() {
-                $(this).fadeOut(3000);
-                $scope.substance = "";
-            });
-        });
-
+    $scope.copyOne = function() {
+        var picked = $scope.rSubstances;
+        var picked = $scope.rSelected;
+        $scope.toPickMap
     };
+
+    $scope.removeOne = function() {
+        alert($scope.lPicked);
+    };
+
+
+
 
     // function getModelsByIds(keys) {
     //     var models = [];
@@ -170,6 +154,33 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
         // var keys = $.map(item, function(v, i) {
         //     return i;
         // });
+
+        $scope.addSubstance = function() {
+            var substance = $scope.substance;
+            substance.lowerCaseName = substance.commonName.toLowerCase();
+            var arrSimilars = $(".subst-select").val();
+            var arrSimilars2 = $(".similarSelect").select2('data');
+            var arrSimilars3 = $("#similarSelect").select2('data');
+
+            var similarTo = {};
+
+            if (arrSimilars !== null) {
+                arrSimilars.forEach(function(item) {
+                    similarTo[item] = true;
+                    substance.hasSimilarTo = true;
+                });
+                substance.similarTo = similarTo;
+            } else {
+                substance.isSimilar = false;
+            }
+            $scope.dataList.$add(substance).then(function() {
+                $("#messages").html("Salvo com sucesso").fadeIn(function() {
+                    $(this).fadeOut(3000);
+                    $scope.substance = "";
+                });
+            });
+
+        };
 
         $("#modalSimSelect").select2({
             initSelection: function(element, callback) {

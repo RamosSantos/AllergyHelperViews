@@ -114,12 +114,12 @@
                         <div class="form-group">
                             <label class="control-label">Pick List Test 2</label>
                             <div class="row">
-                            {{rSubstances}}
-                                <select multiple ng-model="rSubstances" ng-options="rSubstances.commonName for (id, rSubstances) in substMap">
+                                {{rSubstances}}
+                                <select multiple ng-model="rSubstances" ng-options="k as v.commonName for (k, v) in substMap">
                                 </select>
-                                <button class="btn btn-default"><span class="glyphicon glyphicon-plus" ng-click="removeSimilar()"></span></button>
-                                <button class="btn btn-default"><span class="glyphicon glyphicon-minus" ng-click="removeSimilar()"></span></button>
-                                <select multiple ng-model="lPicked" ng-options="lPicked.commonName for (id, lPicked) in toPickMap">
+                                <button class="btn btn-default"><span class="glyphicon glyphicon-plus" ng-click="copyOne()"></span></button>
+                                <button class="btn btn-default"><span class="glyphicon glyphicon-minus" ng-click="removeOne()"></span></button>
+                                <select multiple ng-model="lPicked" ng-options="k as v.commonName for (k, v) in toPickMap">
                                 </select>
                             </div>
                         </div>
