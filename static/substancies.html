@@ -112,15 +112,19 @@
                 <div class="modal-body">
                     <form class="form-vertical" name="test">
                         <div class="form-group">
-                            <label class="control-label">Pick List Test 2</label>
                             <div class="row">
-                                {{rSubstances}}
-                                <select multiple ng-model="rSubstances" ng-options="k as v.commonName for (k, v) in substMap">
-                                </select>
-                                <button class="btn btn-default"><span class="glyphicon glyphicon-plus" ng-click="copyOne()"></span></button>
-                                <button class="btn btn-default"><span class="glyphicon glyphicon-minus" ng-click="removeOne()"></span></button>
-                                <select multiple ng-model="lPicked" ng-options="k as v.commonName for (k, v) in toPickMap">
-                                </select>
+                                <div class="col-sm-5">
+                                    <select size="10" multiple ng-model="rSubstances" ng-options="k.$id as k.commonName for k in substMap | orderBy:'commonName'" class="form-control">
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button style="margin:20px;" class="btn btn-default" ng-click="copyOne()"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                                    <button style="margin:20px;" class="btn btn-default" ng-click="removeOne()"><span class="glyphicon glyphicon-chevron-left"></span></button>
+                                </div>
+                                <div class="col-sm-5">
+                                    <select size="10" multiple ng-model="lPicked" ng-options="k.$id as k.commonName for k in toPickMap | orderBy:'commonName'" class="form-control">
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </form>
