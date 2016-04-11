@@ -107,11 +107,10 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
     };
 
     $scope.selectModal = function(argElement) {
-        var promisses = [];
-        var data = [];
         var currentSimilars;
         $scope.toPickMap = [];
-        $scope.substMap  = [].concat($scope.substList);
+        $scope.substMap = [].concat($scope.substList);
+        $scope.modalItemId = this.substItem.$id;
         if (this.substItem.similarTo !== undefined) {
             currentSimilars = this.substItem.similarTo;
             var keys = $.map(currentSimilars, function(v, i) {
@@ -122,6 +121,24 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
                 $scope.toPickMap.push($scope.substMap[blah[i]]);
                 $scope.substMap.splice(blah[i], 1);
             }
+        }
+    };
+
+    $scope.changeSimilar = function() {
+        var newSimilarIds = $scope.toPickMap.map(
+            function(a) {
+                return a.$id;
+            });
+        var someItem = $scope.substList.$getRecord($scope.modalItemId);
+        if (someItem.similarTo !== undefined) {
+            newSimilarIds.forEach(function(entry) {
+                if (someItem.similarTo[entry] === undefined) {
+                    someItem.similarTo[entry] = true;
+                    $scope.substList.$save(someItem).then(function(ref) {
+                        console.log('$scope.items is now', $scope.items);
+                    });
+                }
+            }, this);
         }
     };
 
@@ -143,7 +160,7 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
         } else {
             substance.isSimilar = false;
         }
-        $scope.dataList.$add(substance).then(function() {
+        $scope.substList.$add(substance).then(function() {
             $("#messages").html("Salvo com sucesso").fadeIn(function() {
                 $(this).fadeOut(3000);
                 $scope.substance = "";

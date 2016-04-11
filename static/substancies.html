@@ -34,7 +34,7 @@
             <form name="substanceCreate">
                 <div>
                     <label for="cas">CAS</label>
-                    <input id="cas" type="text" data-politespace data-grouplength="1,2,7" data-delimiter="-" maxlength="9" data-reverse class="form-control" ng-model="substance.cas" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                    <input id="cas" type="number" data-politespace data-grouplength="1,2,7" data-delimiter="-" maxlength="9" data-reverse class="form-control" ng-model="substance.cas" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
                     <label for="name">Nome</label>
                     <input type="text" id="name" ng-model="substance.commonName" class="form-control" required="true">
                     <br>
@@ -75,7 +75,7 @@
                         <th>Editar</th>
                     </tr>
                 </thead>
-                <tr ng-repeat="substItem in substList">
+                <tr ng-repeat="substItem in substList | orderBy:'commonName'">
                     <td>
                         <input type="hidden" disabled="disabled" class="input-table-disable" value="{{substItem.$id}}" />
                     </td>
@@ -86,10 +86,12 @@
                         <input type="text" ng-model="substItem.desc" disabled="disabled" class="input-table-disable" />
                     </td>
                     <td>
-                        <input type="text" ng-model="substItem.cas" maxlength="7" disabled="disabled" class="input-table-disable" />
+                        <input type="number" ng-model="substItem.cas" maxlength="7" disabled="disabled" class="input-table-disable" />
                     </td>
                     <td>
-                        <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#similar-modal" ng-show="substItem.isSimilar"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#similar-modal" 
+                        ><span class="glyphicon glyphicon-plus"></span></button>
+                        <!-- ng-show="substItem.isSimilar" -->
                     </td>
                     <td><a class="btn btn-danger" href="" ng-click="substList.$remove(substItem)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
                     <td><a class="btn btn-default" href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
