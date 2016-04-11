@@ -34,7 +34,7 @@
             <form name="substanceCreate">
                 <div>
                     <label for="cas">CAS</label>
-                    <input id="cas" type="number" data-politespace data-grouplength="1,2,7" data-delimiter="-" maxlength="9" data-reverse class="form-control" ng-model="substance.cas" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                    <input id="cas" type="text" data-politespace data-grouplength="1,2,7" data-delimiter="-" maxlength="9" data-reverse class="form-control" ng-model="substance.cas" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
                     <label for="name">Nome</label>
                     <input type="text" id="name" ng-model="substance.commonName" class="form-control" required="true">
                     <br>
@@ -86,7 +86,7 @@
                         <input type="text" ng-model="substItem.desc" disabled="disabled" class="input-table-disable" />
                     </td>
                     <td>
-                        <input type="number" ng-model="substItem.cas" maxlength="7" disabled="disabled" class="input-table-disable" />
+                        <input type="text" ng-model="substItem.cas" maxlength="7" disabled="disabled" class="input-table-disable" />
                     </td>
                     <td>
                         <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#similar-modal" 
