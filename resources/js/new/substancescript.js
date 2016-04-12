@@ -55,6 +55,19 @@ function findWithAttr(array, attr, value) {
     return indexes;
 }
 
+function removeA(arr) {
+    var what, a = arguments,
+        L = a.length,
+        ax;
+    while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax = arr.indexOf(what)) !== -1) {
+            arr.splice(ax, 1);
+        }
+    }
+    return arr;
+}
+
 var app = angular.module("substaciesApp", ["firebase", "fxpicklist"]);
 app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObject, $timeout) {
     var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
@@ -111,6 +124,7 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
         $scope.toPickMap = [];
         $scope.substMap = [].concat($scope.substList);
         $scope.modalItemId = this.substItem.$id;
+        $scope.substMap = removeA($scope.substMap, this.substItem);
         if (this.substItem.similarTo !== undefined) {
             currentSimilars = this.substItem.similarTo;
             var keys = $.map(currentSimilars, function(v, i) {
@@ -130,16 +144,23 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
                 return a.$id;
             });
         var someItem = $scope.substList.$getRecord($scope.modalItemId);
-        if (someItem.similarTo !== undefined) {
-            newSimilarIds.forEach(function(entry) {
-                if (someItem.similarTo[entry] === undefined) {
-                    someItem.similarTo[entry] = true;
-                    $scope.substList.$save(someItem).then(function(ref) {
-                        console.log('$scope.items is now', $scope.items);
-                    });
-                }
-            }, this);
+        var newSimilarTo = {};
+        newSimilarIds.forEach(function(entry) {
+
+            newSimilarTo[entry] = true;
+
+
+        }, this);
+        if (someItem['similarTo'] === undefined) {
+            someItem['similarTo'] = newSimilarTo;
+        } else {
+            delete someItem['similarTo'];
+            someItem['similarTo'] = newSimilarTo;
         }
+        $scope.substList.$save(someItem).then(function(ref) {
+            console.log('$scope.items is now', $scope.items);
+        });
+
     };
 
     $scope.addSubstance = function() {
