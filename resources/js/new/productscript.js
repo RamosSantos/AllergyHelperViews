@@ -3,7 +3,6 @@ $(function() {
     var responsejson;
     var newIds = 0;
 
-        if (text.toUpperCase().indexOf(term.toUpperCase()) == 0) {
     $substances.select2({
         id: function(data) {
             return data.Value;
