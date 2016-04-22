@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html >
+<html ng-app="productsApp">
+
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
     <!-- Firebase -->
@@ -12,48 +13,97 @@
     <!-- JQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
     <!--Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <!-- CSS GERAL -->
     <link rel="stylesheet" type="text/css" href="..\resources\css\style.css">
-          
-  <title></title>
-  <link rel="stylesheet" href="">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.css" rel="stylesheet" />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.full.js"></script>
+    <script type="text/javascript" src="../resources/js/new/productscript.js"></script>
+    <title></title>
+    <link rel="stylesheet" href="">
 </head>
-<body >
+
+<body ng-controller="productsCtrl">
     <div class="jumbotron">
         <a class="" href="nn\..\..\index.html">
             <img src="..\resources\img\logo.png" alt="">
         </a>
-        <nav  id="navcontainer">            
+        <nav id="navcontainer">
             <a href="allergies.html" id="allergies">Alergias</a>
             <a href="substancies.html" id="substancies">Substâncias</a>
             <a href="products.html" id="products">Produtos</a>
         </nav>
     </div>
     <br>
-  <div class="container"><br>
-      <div class="row">
-        <form >
-          <div >
-            <div >
-              <h3>Produto</h3>
-              <label for="name">Nome</label>
-              <input type="text" id="name" class="form-control" required="true"><br>
-              <label for="component">Componente</label>
-              <textarea type="text" id="component" class="form-control" required="true"></textarea><br>
-              <button class="btn btn-default" type="submit" id="submit" style="float:right">
-                Cadastrar   
-              </button>
-              
-            </div>
-          </div>
-         
+    <div class="container">
+        <br>
+        <div class="row">
+            <form>
+                <div>
+                    <div>
+                        <h3>Produto</h3>
+                        <label for="name">Código de barra</label>
+                        <input type="text" id="barcode" maxlength="13" class="form-control" ng-model="product.barCode" required="true" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                        <br>
+                        <label for="name">Nome</label>
+                        <input type="text" id="name" ng-model="product.name"  class="form-control" required="true">
+                        <br>
+                        <label for="name">Marca</label>
+                        <input type="text" id="brand" ng-model="product.brandName" class="form-control" required="true">
+                        <br>
+                        <label for="component">Composição</label>
+                        <select class="subst-select form-control" id="substancieSelect" ng-model="product.ingredients" multiple="multiple"></select>
+                        <br>
+                        <br>
+                        <button class="btn btn-primary" type="submit" ng-click="addProduct()" id="submit" style="float:right">Cadastrar
+                        </button>
+                        <br>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="productsList" class="container">
+        <form>
+            <img src="..\resources\img\loader.gif" ng-show="loader" width="140" height="140" style="left:45%;position:relative">
+            <table class="table table-items " ng-hide="loader">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Cod. de barra</th>
+                        <th>Nome</th>
+                        <th>Marca</th>
+                        <th>Composição</th>
+                        <th>Remover</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tr ng-repeat="productItem in productsList | orderBy:'name'">
+                    <td>
+                        <input type="hidden" disabled="disabled" class="input-table-disable" value="{{productItem.$id}}" />
+                    </td>
+                    <td>
+                        <input type="text" ng-model="productItem.commonName" disabled="disabled" class="input-table-disable" />
+                    </td>
+                    <td>
+                        <input type="text" ng-model="productItem.desc" disabled="disabled" class="input-table-disable" />
+                    </td>
+                    <td>
+                        <input type="text" ng-model="productItem.cas" disabled="disabled" class="input-table-disable" data-politespace data-grouplength="1,2,7" data-delimiter="-" maxlength="9" data-reverse />
+                    </td>
+                    <td>
+                        <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#similar-modal"><span class="glyphicon glyphicon-plus"></span></button>
+                        <!-- ng-show="substItem.isSimilar" -->
+                    </td>
+                    <td><a class="btn btn-danger" href="" ng-click="substList.$remove(productItem)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
+                    <td><a class="btn btn-default" href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
+                    <td>
+                        <button class="btn btn-primary btn-save" disabled="disabled" ng-click="substList.$save(productItem)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
+                    </td>
+                </tr>
+            </table>
         </form>
-      </div>
-  </div>
-  <div id="componentsList">
-      
-  </div>
-  
+    </div>
 </body>
+
 </html>
