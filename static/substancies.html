@@ -11,8 +11,9 @@
     <!-- CSS GERAL -->
     <link rel="stylesheet" type="text/css" href="..\resources\css\style.css">
     <link rel="stylesheet" type="text/css" href="http://filamentgroup.github.io/politespace/dist/politespace.css">
+    <!-- <link rel="stylesheet" type="text/css" href="..\resources\css\angular-picklist.css"> -->
     <title></title>
-    <link rel="stylesheet" href="">
+   
 </head>
 
 <body ng-controller="substanciesCrtl">
@@ -43,29 +44,33 @@
                     <label>
                         <input type="checkbox" ng-model="substance.isSimilar" ng-init="substance.isSimilar=false" ng-change="similarChange()" id="checkboxSimilar">Similar</label>
                     <br>
-                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" ng-model="substance.similarTo" disabled></select>
+                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" style="width: 100%" ng-model="substance.similarTo" disabled></select>
                     <br>
                     <br>
                     <button class="btn btn-primary" type="submit" ng-click="addSubstance()" id="submit" style="float:right">Cadastrar
                     </button>
                     <br>
-					<div>
-						<span id="messages">
-							
-						</span>
-					</div>
+                    <div>
+                        <span id="messages"></span>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
     <br>
-    <div id="substanciesList" class="container">
+    <div id="substanciesList" class="container div-list">
         <form>
+            <div class="col-md-12">
+                <div class="form-group has-feedback" style="float:right;width:450px">
+                    <input type="text" class="form-control" placeholder="Busca" ng-model="searchSubstancies" />
+                    <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                </div>
+            </div>
             <img src="..\resources\img\loader.gif" ng-show="loader" width="140" height="140" style="left:45%;position:relative">
             <table class="table table-items " ng-hide="loader">
                 <thead>
                     <tr>
-						<th></th>
+                        <th></th>
                         <th>Nome</th>
                         <th>Descrição</th>
                         <th>Casnumber</th>
@@ -74,30 +79,50 @@
                         <th>Editar</th>
                     </tr>
                 </thead>
-                <tr ng-repeat="allergy in dataList">
-					<td>
-                        <input type="hidden"  disabled="disabled" class="input-table-disable" value="{{allergy.$id}}"/>
+                <tr ng-repeat="substItem in substList | orderBy:'commonName' | filter : searchSubstancies | startFrom:currentPage*pageSize | limitTo:pageSize ">
+                    <td>
+                        <input type="hidden" disabled="disabled" class="input-table-disable" value="{{substItem.$id}}" />
                     </td>
                     <td>
-                        <input type="text" ng-model="allergy.commonName" disabled="disabled" class="input-table-disable" />
+                        <input type="text" ng-model="substItem.commonName" disabled="disabled" class="input-table-disable" />
                     </td>
                     <td>
-                        <input type="text" ng-model="allergy.desc" disabled="disabled" class="input-table-disable" />
+                        <input type="text" ng-model="substItem.desc" disabled="disabled" class="input-table-disable" />
                     </td>
                     <td>
-                        <input type="text" ng-model="allergy.cas" maxlength="7" disabled="disabled" class="input-table-disable" />
+                        <input type="text" ng-model="substItem.cas" disabled="disabled" class="input-table-disable" />
                     </td>
                     <td>
-                        <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#similar-modal" ng-show="allergy.hasSimilarTo"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#similar-modal"><span class="glyphicon glyphicon-plus"></span></button>
+                        <!-- ng-show="substItem.isSimilar" -->
                     </td>
-                    <td><a class="btn btn-danger" href="" ng-click="dataList.$remove(allergy)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
+                    <td><a class="btn btn-danger" href="" ng-click="substList.$remove(substItem)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
                     <td><a class="btn btn-default" href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
                     <td>
-                        <button class="btn btn-primary btn-save" disabled="disabled" ng-click="dataList.$save(allergy)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
+                        <button class="btn btn-primary btn-save" disabled="disabled" ng-click="substList.$save(substItem)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
                     </td>
                 </tr>
             </table>
-			
+            <!-- DIV PAGINACAO-->
+            <div class="pagination">
+                <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage == 0" ng-click="currentPage=0">
+                    <span class="glyphicon glyphicon-fast-backward">
+                        
+                    </span>
+                </button>
+                <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+                    <span class="glyphicon glyphicon-chevron-left">
+                        
+                    </span>
+                </button>
+                 {{currentPage+1}}/{{numberOfPages()}}
+                <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage >= substList.length/pageSize - 1" ng-click="currentPage=currentPage+1" >
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+                <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage >= substList.length/pageSize - 1" ng-click="currentPage=limitPage-1" >
+                    <span class="glyphicon glyphicon-fast-forward"></span>
+                </button>
+            </div>
         </form>
     </div>
     <!-- Modal -->
@@ -110,19 +135,30 @@
                     <h4 class="modal-title">Substâncias Similares</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="area-select2">
-						<select class="form-control selected-subs" id="selectedSubs" multiple="multiple" ng-model="selectSubs" style="width:100%" >
-
-                        </select>
-
-					</div>
+                    <form class="form-vertical" name="test">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <select size="10" multiple ng-model="rSubstances" ng-options="k.$id as k.commonName for k in substMap | orderBy:'commonName'" class="form-control">
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button style="margin:20px;" class="btn btn-default" ng-click="copyOne()"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                                    <button style="margin:20px;" class="btn btn-default" ng-click="removeOne()"><span class="glyphicon glyphicon-chevron-left"></span></button>
+                                </div>
+                                <div class="col-sm-5">
+                                    <select size="10" multiple ng-model="lPicked" ng-options="k.$id as k.commonName for k in toPickMap | orderBy:'commonName'" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" ng-click="changeSimilar()">Salvar</button>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <br>
     <br>
@@ -148,6 +184,9 @@
     <script type="text/javascript" src="..\resources\js\new\substancescript.js"></script>
     <!--Bootstrap JS-->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="..\resources\js\picklist.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/lodash/4.8.2/lodash.core.min.js"></script>
+    <script src="..\resources\js\angular-picklist.js"></script> -->
 </body>
 
 </html>

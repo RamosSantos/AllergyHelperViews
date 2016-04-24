@@ -64,3 +64,14 @@
 	color #337AB7;
 }
 
+.pagination{
+  margin:44% 35%;
+  position: absolute;
+  top: 63%;
+  width: 280px;
+}
+
+.div-list{
+  min-height:500px;
+  height:500px;
+}
