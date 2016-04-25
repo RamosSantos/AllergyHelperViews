@@ -78,7 +78,7 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
     $scope.substList = arr;
     $scope.currentPage = 0;
     $scope.pageSize = 5;
-    $scope.limitPage;
+    $scope.limitPage = 0;
     $scope.numberOfPages=function(){
          $scope.limitPage = Math.ceil(arr.length/$scope.pageSize); ;
         return $scope.limitPage;             
@@ -180,7 +180,7 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
         if (arrSimilars !== null) {
             arrSimilars.forEach(function(item) {
                 similarTo[item] = true;
-                substance.hasSimilarTo = true;
+                
             });
             substance.similarTo = similarTo;
         } else {
@@ -195,7 +195,7 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
 
     };
 
-    
+
 
 });
 app.filter('startFrom', function() {

@@ -19,8 +19,10 @@
     <link href="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.css" rel="stylesheet" />
     <script src="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.full.js"></script>
     <script type="text/javascript" src="../resources/js/new/productscript.js"></script>
+    <!--Bootstrap JS-->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <title></title>
-    <link rel="stylesheet" href="">
+    
 </head>
 
 <body ng-controller="productsCtrl">
@@ -94,7 +96,7 @@
                         <input type="text" ng-model="productItem.brandName" disabled="disabled" class="input-table-disable" data-politespace data-grouplength="1,2,7" data-delimiter="-" maxlength="9" data-reverse />
                     </td>
                     <td>
-                        <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#ingredients-modal"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button class="btn btn-default btn-openModal"  data-toggle="modal" data-target="#ingredients-modal"><span class="glyphicon glyphicon-plus"></span></button>
                         <!-- ng-show="substItem.isSimilar" -->
                     </td>
                     <td><a class="btn btn-danger" href="" ng-click="productsList.$remove(productItem)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
@@ -102,6 +104,7 @@
                     <td>
                         <button class="btn btn-primary btn-save" disabled="disabled" ng-click="substList.$save(productItem)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
                     </td>
+                   
                 </tr>
             </table>
         </form>
@@ -141,6 +144,26 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 </body>
 
 </html>
