@@ -65,10 +65,10 @@
 }
 
 .pagination{
-  margin:44% 35%;
+  margin:0 auto;
+  display: table;
   position: absolute;
-  top: 63%;
-  width: 280px;
+  left:40%;
 }
 
 .div-list{

@@ -90,7 +90,7 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
         $scope.$apply(function() {
             $scope.loader = false;
         });
-    }, 1200);
+    }, 1500);
 
     $scope.similarChange = function() {
         var test = $(".subst-select").is(':disabled');
