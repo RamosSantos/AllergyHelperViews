@@ -174,33 +174,44 @@ app.controller("productsCtrl", function($scope, $firebaseArray, $timeout) {
 
         var ingredients = {};
 
+        var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
+        var list = $firebaseArray(ref);
+        var arrayOfPromises = [];
         if (arrIngredients !== null) {
             arrIngredients.forEach(function(item) {
-                if (!isNaN(+(item.id))) {
-                    var ref = new Firebase("https://allergyhelper3.firebaseio.com/substancies");
-                    var list = $firebaseArray(ref);
-                    list.$add({
-                        commonName : item.text,
-                        lowerCaseName : item.text.toLowerCase(),
-                        isSimilar : false
+                var isItAFireBaseKey = isNaN(+(item.id));
+
+                if (!isItAFireBaseKey) {
+                    arrayOfPromises.push(list.$add({
+                        commonName: item.text,
+                        lowerCaseName: item.text.toLowerCase(),
+                        isSimilar: false
                     }).then(function(ref) {
-                        var id = ref.key();
-                        ingredients[id] = true;
+                        return ref.key();
+                        // ingredients[id] = true;
                         // console.log("added record with id " + id);
                         // list.$indexFor(id); // returns location in the array
-                    });
-                }else{
-                    ingredients[item.id] = true;    
+                    }));
+                } else {
+                    ingredients[item.id] = true;
                 }
             });
-            product.ingredients = ingredients;
-        } 
-        $scope.productsList.$add(product).then(function() {
-            $("#messages").html("Salvo com sucesso").fadeIn(function() {
-                $(this).fadeOut(3000);
-                $scope.product = null;
+            Promise.all(arrayOfPromises).then(function(values) {
+                for (var i = 0; i < values.length; i++) {
+                    ingredients[values[i]] = true;
+                }
+                product.ingredients = ingredients;
+                console.log(product);
+                $scope.productsList.$add(product).then(function() {
+                    $("#messages").html("Salvo com sucesso").fadeIn(function() {
+                        $(this).fadeOut(3000);
+                        $scope.product = null;
+                    });
+                }); // [3, 1337, "foo"] 
             });
-        });
+            //product.ingredients = ingredients;
+        }
+
 
     };
 

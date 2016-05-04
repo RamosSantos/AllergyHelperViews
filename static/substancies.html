@@ -106,14 +106,10 @@
             <!-- DIV PAGINACAO-->
             <div class="pagination">
                 <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage == 0" ng-click="currentPage=0">
-                    <span class="glyphicon glyphicon-fast-backward">
-                        
-                    </span>
+                    <span class="glyphicon glyphicon-fast-backward"></span>
                 </button>
                 <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
-                    <span class="glyphicon glyphicon-chevron-left">
-                        
-                    </span>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
                 </button>
                  {{currentPage+1}}/{{numberOfPages()}}
                 <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage >= substList.length/pageSize - 1" ng-click="currentPage=currentPage+1" >
