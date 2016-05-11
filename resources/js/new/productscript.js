@@ -85,9 +85,9 @@ $(function() {
 });
 
 var app = angular.module("productsApp", ["firebase"]);
-app.controller("productsCtrl", function($scope, $firebaseArray, $timeout) {
+app.controller("productsCtrl", function($scope, $firebaseObject, $firebaseArray,$timeout) {
     var ref = new Firebase("https://allergyhelper3.firebaseio.com/products");
-    var arr = $firebaseArray(ref);
+    var arr = $firebaseObject(ref);
 
     $scope.loader = true;
     $scope.productsList = arr;
@@ -202,13 +202,38 @@ app.controller("productsCtrl", function($scope, $firebaseArray, $timeout) {
                 }
                 product.ingredients = ingredients;
                 console.log(product);
-                $scope.productsList.$add(product).then(function() {
+                // $scope.productsList.$add(product).then(function() {
+                // TODO : Verificar se existe já um cadastrado e informar 
+                // ao usuário
+                $scope.productsList[product.barCode] = product;
+                $scope.productsList.$save().then(function(ref) {
+                    ref.key() === $scope.productsList.$id; // true
                     $("#messages").html("Salvo com sucesso").fadeIn(function() {
                         $(this).fadeOut(3000);
                         $scope.product = null;
-                    });
-                }); // [3, 1337, "foo"] 
+                    }); // [3, 1337, "foo"] 
+                }, function(error) {
+                    console.log("Error:", error);
+                });
             });
+            ////
+            // Desta maneira nao há como ter um 'callback' no set() 
+            // mas funcionaria usando uma instancia 
+            // de $firebaseArray
+            //
+            // Promise.all(arrayOfPromises).then(function(values) {
+            //     for (var i = 0; i < values.length; i++) {
+            //         ingredients[values[i]] = true;
+            //     }
+            //     product.ingredients = ingredients;
+            //     console.log(product);
+            //     // $scope.productsList.$add(product).then(function() {
+            //     $scope.productsList.$ref().child(product.barCode).set(product);
+            //     $("#messages").html("Salvo com sucesso").fadeIn(function() {
+            //         $(this).fadeOut(3000);
+            //         $scope.product = null;
+            //     }); // [3, 1337, "foo"] 
+            // });
             //product.ingredients = ingredients;
         }
 

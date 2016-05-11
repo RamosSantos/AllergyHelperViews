@@ -80,9 +80,9 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
     $scope.pageSize = 5;
     $scope.limitPage = 0;
     $scope.numberOfPages=function(){
-         $scope.limitPage = Math.ceil(arr.length/$scope.pageSize); ;
+         $scope.limitPage = Math.ceil(arr.length/$scope.pageSize); 
         return $scope.limitPage;             
-    }
+    };
 
    
 
@@ -156,11 +156,11 @@ app.controller("substanciesCrtl", function($scope, $firebaseArray, $firebaseObje
 
 
         }, this);
-        if (someItem['similarTo'] === undefined) {
-            someItem['similarTo'] = newSimilarTo;
+        if (someItem.similarTo === undefined) {
+            someItem.similarTo = newSimilarTo;
         } else {
-            delete someItem['similarTo'];
-            someItem['similarTo'] = newSimilarTo;
+            delete someItem.similarTo;
+            someItem.similarTo = newSimilarTo;
         }
         $scope.substList.$save(someItem).then(function(ref) {
             console.log('$scope.items is now', $scope.items);
@@ -202,7 +202,7 @@ app.filter('startFrom', function() {
         return function(input, start) {
             start = +start; //parse to int
             return input.slice(start);
-        }
+        };
     });
 
 $(".btn-save").click(function() {
