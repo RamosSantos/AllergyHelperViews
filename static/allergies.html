@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html >
+<html ng-app="allergiesApp">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,8 +9,10 @@
     <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
     <!-- AngularFire -->
     <script src="https://cdn.firebase.com/libs/angularfire/1.1.4/angularfire.min.js"></script>
-    <!-- JQuey -->
+    <!-- JQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+     <script type="text/javascript" src="../resources/js/new/allergiescript.js"></script>
+      <script src="..\resources\js\picklist.js"></script>
     <!--Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
     <!-- CSS GERAL -->
@@ -18,7 +20,7 @@
   <title></title>
   <link rel="stylesheet" href="">
 </head>
-<body >
+<body ng-controller="allergiesCtrl" >
     <div class="jumbotron">
         <a class="" href="nn\..\..\index.html">
             <img src="..\resources\img\logo.png" alt="">
@@ -36,22 +38,106 @@
           <div >
             <div >
               <h3>Alergia</h3>
-              <label for="name">Nome</label>
-              <input type="text" id="name" class="form-control" required="true"><br>
-              <label for="component">Componente</label>
-              <textarea type="text" id="component" class="form-control" required="true"></textarea><br>
-              <button class="btn btn-default" type="submit" id="submit" style="float:right">
+             
+              <form class="form-vertical" name="test" ng-init="loadDual()">
+                <label for="name">Nome</label>
+                <input type="text" id="name" class="form-control" ng-model="allergy.commonName" required><br>
+                <label for="name">Descrição</label>
+                <input type="text" id="descricaoAllergy" class="form-control" ng-model="allergy.description" required><br>
+                <label for="component">Substâncias</label>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <select size="10" multiple ng-model="rSubstancies" ng-options="k.$id as k.commonName for k in substMap | orderBy:'commonName'" class="form-control">
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <button style="margin:20px;" class="btn btn-default" ng-click="copyOne()"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                                    <button style="margin:20px;" class="btn btn-default" ng-click="removeOne()"><span class="glyphicon glyphicon-chevron-left"></span></button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select size="10" multiple ng-model="lPicked" ng-options="k.$id as k.commonName for k in toPickMap | orderBy:'commonName'" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+              <br>
+              <button class="btn btn-primary" type="submit" id="submit" style="float:right" ng-click="addAllergy()">
                 Cadastrar   
               </button>
-              
+              <button class="btn btn-primary" type="submit" id="submitLoad" style="float:right;display:none" ng-click="loadDual()" >
+                  LOAD   
+              </button>
+             <div>
+                  <span id="messages"></span>
+              </div>
             </div>
           </div>
          
         </form>
       </div>
   </div>
-  <div id="componentsList">
+  <div id="allergiesList" class="container div-list">
       
+        <form>
+            <div class="col-md-12">
+                <div class="form-group has-feedback" style="float:right;width:450px">
+                    <input type="text" class="form-control" placeholder="Busca" ng-model="searchAllergies" />
+                    <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                </div>
+            </div>
+            <img src="..\resources\img\loader.gif" ng-show="loader" width="140" height="140" style="left:45%;position:relative">
+            <table class="table table-items " ng-hide="loader">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Substâncias</th>
+                        <th>Remover</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tr ng-repeat="allergyItem in allergiesList | orderBy:'commonName' | filter : searchAllergies | startFrom:currentPage*pageSize | limitTo:pageSize ">
+                    <td>
+                        <input type="hidden" disabled="disabled" class="input-table-disable" value="{{allergyItem.$id}}" />
+                    </td>
+                    <td>
+                        <input type="text" ng-model="allergyItem.commonName" disabled="disabled" class="input-table-disable" />
+                    </td>
+                    <td>
+                        <input type="text" ng-model="allergyItem.description" disabled="disabled" class="input-table-disable" />
+                    </td>
+                   <td>
+                       <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#similar-modal"><span class="glyphicon glyphicon-plus"></span></button>
+                    
+                    </td>
+                    <td><a class="btn btn-danger" href="" ng-click="allergiesList.$remove(allergyItem)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
+                    <td><a class="btn btn-default" href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
+                    <td>
+                        <button class="btn btn-primary btn-save" disabled="disabled" ng-click="allergiesList.$save(allergyItem)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
+                    </td>
+                </tr>
+            </table>
+            <!-- DIV PAGINACAO-->
+            <div class="pagination">
+                <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage == 0" ng-click="currentPage=0">
+                    <span class="glyphicon glyphicon-fast-backward"></span>
+                </button>
+                <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </button>
+                 {{currentPage+1}}/{{numberOfPages()}}
+                <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage >= allergiesList.length/pageSize - 1" ng-click="currentPage=currentPage+1" >
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+                <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage >= allergiesList.length/pageSize - 1" ng-click="currentPage=limitPage-1" >
+                    <span class="glyphicon glyphicon-fast-forward"></span>
+                </button>
+            </div>
+        </form>
+    </div>
   </div>
   
 </body>

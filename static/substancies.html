@@ -74,7 +74,6 @@
                         <th>Nome</th>
                         <th>Descrição</th>
                         <th>Casnumber</th>
-                        <th>Similar</th>
                         <th>Remover</th>
                         <th>Editar</th>
                     </tr>
@@ -92,10 +91,10 @@
                     <td>
                         <input type="text" ng-model="substItem.cas" disabled="disabled" class="input-table-disable" />
                     </td>
-                    <td>
+                    <!--<td>
                         <button class="btn btn-default" ng-click="selectModal($event)" data-toggle="modal" data-target="#similar-modal"><span class="glyphicon glyphicon-plus"></span></button>
-                        <!-- ng-show="substItem.isSimilar" -->
-                    </td>
+                        <!-- ng-show="substItem.isSimilar" 
+                    </td> -->
                     <td><a class="btn btn-danger" href="" ng-click="substList.$remove(substItem)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
                     <td><a class="btn btn-default" href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
                     <td>
@@ -106,14 +105,10 @@
             <!-- DIV PAGINACAO-->
             <div class="pagination">
                 <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage == 0" ng-click="currentPage=0">
-                    <span class="glyphicon glyphicon-fast-backward">
-                        
-                    </span>
+                    <span class="glyphicon glyphicon-fast-backward"></span>
                 </button>
                 <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
-                    <span class="glyphicon glyphicon-chevron-left">
-                        
-                    </span>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
                 </button>
                  {{currentPage+1}}/{{numberOfPages()}}
                 <button style="margin:10px;" class="btn btn-default" ng-disabled="currentPage >= substList.length/pageSize - 1" ng-click="currentPage=currentPage+1" >
