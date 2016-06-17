@@ -88,10 +88,17 @@ var app = angular.module("productsApp", ["firebase"]);
 app.controller("productsCtrl", function($scope, $firebaseObject, $firebaseArray,$timeout) {
     var ref = new Firebase("https://allergyhelper3.firebaseio.com/products");
     var arr = $firebaseObject(ref);
-
+    var arrProduct = $firebaseArray(ref);
     $scope.loader = true;
     $scope.productsList = arr;
-
+    $scope.productsListArr = arrProduct;
+    $scope.currentPage = 0;
+    $scope.pageSize = 5;
+    $scope.limitPage = 0;
+     $scope.numberOfPages=function(){
+        $scope.limitPage = Math.ceil(arrProduct.length/$scope.pageSize); 
+        return $scope.limitPage;             
+    };
 
     $timeout(function() {
         $scope.$apply(function() {
@@ -240,4 +247,10 @@ app.controller("productsCtrl", function($scope, $firebaseObject, $firebaseArray,
 
     };
 
+});
+app.filter('startFrom', function() {
+    return function(input, start) {
+        start = +start; //parse to int
+        return input.slice(start);
+    };
 });

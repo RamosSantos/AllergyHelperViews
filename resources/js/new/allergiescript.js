@@ -13,13 +13,15 @@ app.controller("allergiesCtrl", function($scope, $firebaseArray, $firebaseObject
     $scope.pageSize = 5;
     $scope.limitPage = 0;
     $scope.toPickMap = [];
+    $scope.toPickMapModal = [];
     $scope.numberOfPages=function(){
         $scope.limitPage = Math.ceil(arr.length/$scope.pageSize); 
         return $scope.limitPage;             
     };
 
     $scope.loadDual = function(){
-    	 $scope.substMap = [].concat($scope.substanciesList);
+        $scope.substMap = [].concat($scope.substanciesList);
+        console.log('dual carregado');
     }
 
      $scope.editItem = function(argElement) {
@@ -50,14 +52,80 @@ app.controller("allergiesCtrl", function($scope, $firebaseArray, $firebaseObject
         }
     };
 
+    $scope.copyOneModal = function() {
+        var pickedIds = $scope.rSubstancesModal;
+        var pickedPositions = findWithAttr($scope.substMapModal, '$id', pickedIds);
+        for (var i = pickedPositions.length - 1; i >= 0; i--) {
+            $scope.toPickMapModal.push($scope.substMap[pickedPositions[i]]);
+            $scope.substMapModal.splice([pickedPositions[i]], 1);
+        }
+        
+    };
+
+    $scope.removeOneModal = function() {
+        var pickedIds = $scope.lPickedModal;
+        var pickedPositions = findWithAttr($scope.toPickMapModal, '$id', pickedIds);
+        for (var i = pickedPositions.length - 1; i >= 0; i--) {
+            $scope.substMapModal.push($scope.toPickMapModal[pickedPositions[i]]);
+            $scope.toPickMapModal.splice([pickedPositions[i]], 1);
+        }
+    };
+
+    $scope.selectModal = function(argElement) {
+        var currentSimilars;
+        $scope.toPickMapModal = [];
+        $scope.substMapModal = [].concat($scope.substanciesList);
+        $scope.modalItemId = this.allergyItem.$id;
+        $scope.substMapModal = removeA($scope.substMapModal, this.allergyItem);
+        if (this.allergyItem.substances !== undefined) {
+            currentSimilars = this.allergyItem.substances;
+            var keys = $.map(currentSimilars, function(v, i) {
+                return i;
+            });
+            var blah = findWithAttr($scope.substMapModal, '$id', keys);
+            for (var i = blah.length - 1; i >= 0; i--) {
+                $scope.toPickMapModal.push($scope.substMapModal[blah[i]]);
+                $scope.substMapModal.splice(blah[i], 1);
+            }
+        }
+    };
+
+    $scope.changeSimilar = function() {
+        var newSimilarIds = $scope.toPickMapModal.map(
+            function(a) {
+                return a.$id;
+            });
+        var someItem = $scope.allergiesList.$getRecord($scope.modalItemId);
+        var newSimilarTo = {};
+        newSimilarIds.forEach(function(entry) {
+
+            newSimilarTo[entry] = true;
+
+
+        }, this);
+        if (someItem.substances === undefined) {
+            someItem.substances = newSimilarTo;
+        } else {
+            delete someItem.substances;
+            someItem.substances = newSimilarTo;
+        }
+        $scope.allergiesList.$save(someItem).then(function() {
+           $("#messagesModal").html("Alterado com sucesso").fadeIn(function() {
+                $(this).fadeOut(3000);
+
+            });
+        });
+
+    };
 
     $timeout(function() {
-    	$("#submitLoad").click();
         $scope.$apply(function() {
             $scope.loader = false;
             
         });
-    }, 1200);
+    }, 1500).then(function(){
+        $scope.loadDual();
+    });
 
     $scope.addAllergy = function(){
     	var allergy = $scope.allergy;
@@ -70,6 +138,13 @@ app.controller("allergiesCtrl", function($scope, $firebaseArray, $firebaseObject
             newSimilarTo[entry] = true;
         }, this);
         allergy.substances = newSimilarTo;
+        if($.isEmptyObject(newSimilarTo)){
+          $("#messages").html("Preencha as substâncias").fadeIn(function() {
+                $(this).fadeOut(3000);
+
+            });
+            return;  
+        }
         $scope.allergiesList.$add(allergy).then(function(){
         	allergy.commonName ="";
         	allergy.description = "";
@@ -82,7 +157,7 @@ app.controller("allergiesCtrl", function($scope, $firebaseArray, $firebaseObject
     	
     }
 
-     $scope.loadDual();
+     
 });
 app.filter('startFrom', function() {
     return function(input, start) {

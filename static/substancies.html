@@ -12,6 +12,8 @@
     <link rel="stylesheet" type="text/css" href="..\resources\css\style.css">
     <link rel="stylesheet" type="text/css" href="http://filamentgroup.github.io/politespace/dist/politespace.css">
     <!-- <link rel="stylesheet" type="text/css" href="..\resources\css\angular-picklist.css"> -->
+    <!--Bootstrap JS-->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <title></title>
    
 </head>
@@ -33,18 +35,19 @@
         <div class="row">
             <form name="substanceCreate">
                 <div>
+                    <h3>Substância</h3>
                     <label for="cas">CAS</label>
-                    <input id="cas" type="text" data-politespace data-grouplength="1,2,7" data-delimiter="-" maxlength="9" data-reverse class="form-control" ng-model="substance.cas" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                    <input id="cas" type="text" data-politespace data-grouplength="1,2,7" data-delimiter="-" maxlength="9" data-reverse class="form-control" ng-model="substance.cas" onkeypress='return event.charCode >= 48 && event.charCode <= 57'><br>
                     <label for="name">Nome</label>
                     <input type="text" id="name" ng-model="substance.commonName" class="form-control" required="true">
                     <br>
                     <label for="substancies">Descrição</label>
                     <textarea type="text" id="desc" ng-model="substance.desc" class="form-control"> </textarea>
                     <br>
-                    <label>
+                    <!--<label>
                         <input type="checkbox" ng-model="substance.isSimilar" ng-init="substance.isSimilar=false" ng-change="similarChange()" id="checkboxSimilar">Similar</label>
                     <br>
-                    <select class="subst-select form-control" id="similarSelect" multiple="multiple" style="width: 100%" ng-model="substance.similarTo" disabled></select>
+                 <select class="subst-select form-control" id="similarSelect" multiple="multiple" style="width: 100%" ng-model="substance.similarTo" disabled></select> -->
                     <br>
                     <br>
                     <button class="btn btn-primary" type="submit" ng-click="addSubstance()" id="submit" style="float:right">Cadastrar
