@@ -22,7 +22,7 @@ app.controller("allergiesCtrl", function($scope, $firebaseArray, $firebaseObject
     $scope.loadDual = function(){
         $scope.substMap = [].concat($scope.substanciesList);
         console.log('dual carregado');
-    }
+    };
 
      $scope.editItem = function(argElement) {
         var element = argElement.target;
@@ -155,7 +155,7 @@ app.controller("allergiesCtrl", function($scope, $firebaseArray, $firebaseObject
             });
         });
     	
-    }
+    };
 
      
 });

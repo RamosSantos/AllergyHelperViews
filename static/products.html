@@ -88,7 +88,7 @@
                         <th>Editar</th>
                     </tr>
                 </thead>
-                <tr ng-repeat="productItem in productsListArr  | orderBy:'name' | filter : searchProducts | startFrom:currentPage*pageSize | limitTo:pageSize ">
+                <tr ng-repeat="productItem in productsList  | orderBy:'name' | filter : searchProducts | startFrom:currentPage*pageSize | limitTo:pageSize ">
                     <td>
                         <input type="hidden" disabled="disabled" class="input-table-disable" value="{{productItem.$id}}" />
                     </td>
@@ -102,13 +102,13 @@
                         <input type="text" ng-model="productItem.brandName" disabled="disabled" class="input-table-disable" data-politespace data-grouplength="1,2,7" data-delimiter="-" maxlength="9" data-reverse />
                     </td>
                     <td>
-                        <button class="btn btn-default btn-openModal"  data-toggle="modal" data-target="#ingredients-modal"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button class="btn btn-default btn-openModal"  ng-click="selectModal($event)" data-toggle="modal" data-target="#ingredients-modal"><span class="glyphicon glyphicon-plus"></span></button>
                         <!-- ng-show="substItem.isSimilar" -->
                     </td>
-                    <td><a class="btn btn-danger" href="" ng-click="productsListArr.$remove(productItem)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
+                    <td><a class="btn btn-danger" href="" ng-click="productsList.$remove(productItem)"><span class="glyphicon glyphicon glyphicon-remove"></span></a></td>
                     <td><a class="btn btn-default" href="" ng-click="editItem($event)"><span class="glyphicon glyphicon glyphicon-pencil"></span></a></td>
                     <td>
-                        <button class="btn btn-primary btn-save" disabled="disabled" ng-click="productsListArr.$save(productItem)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
+                        <button class="btn btn-primary btn-save" disabled="disabled" ng-click="productsList.$save(productItem)"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
                     </td>
                    
                 </tr>
@@ -145,15 +145,15 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-5">
-                                    <select size="10" multiple ng-model="rSubstances" ng-options="k.$id as k.commonName for k in substMap | orderBy:'commonName'" class="form-control">
+                                    <select size="10" multiple ng-model="rSubstancesModal" ng-options="k.$id as k.commonName for k in substMapModal | orderBy:'commonName'" class="form-control">
                                     </select>
                                 </div>
                                 <div class="col-sm-2">
-                                    <button style="margin:20px;" class="btn btn-default" ng-click="copyOne()"><span class="glyphicon glyphicon-chevron-right"></span></button>
-                                    <button style="margin:20px;" class="btn btn-default" ng-click="removeOne()"><span class="glyphicon glyphicon-chevron-left"></span></button>
+                                    <button style="margin:20px;" class="btn btn-default" ng-click="copyOneModal()"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                                    <button style="margin:20px;" class="btn btn-default" ng-click="removeOneModal()"><span class="glyphicon glyphicon-chevron-left"></span></button>
                                 </div>
                                 <div class="col-sm-5">
-                                    <select size="10" multiple ng-model="lPicked" ng-options="k.$id as k.commonName for k in toPickMap | orderBy:'commonName'" class="form-control">
+                                    <select size="10" multiple ng-model="lPickedModal" ng-options="k.$id as k.commonName for k in toPickMapModal | orderBy:'commonName'" class="form-control">
                                     </select>
                                 </div>
                             </div>
@@ -161,7 +161,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-click="changeSimilar()">Salvar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true" ng-click="changeSimilar()">Salvar</button>
                 </div>
             </div>
         </div>
